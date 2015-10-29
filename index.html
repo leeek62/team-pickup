@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contact Manager</title>
+    <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="app/css/main.css" rel="stylesheet">
+</head>
+<body>
+<header class="bs-header">
+    <div class="container">
+        <h1>People</h1>
+        <p>Example of retrieving/adding/editing/deleting people</p>
+    </div>
+</header>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 main-container">
+        </div>
+    </div>
+</div>
+
+<script type="text/template" id="tpl-contacts">
+    <h2 class="page-header text-center">List of contacts</h2>
+    <p class="text-center">
+        <a href="#contacts/new" class="btn btn-lg btn-outline">Add Contact</a>
+    </p>
+    <ul class="media-list row contacts-container"></ul>
+</script>
+<script type="text/template" id="tpl-contact">
+    <div class="thumbnail">
+        <img class="media-object" src="app/img/faces/<%- avatar %>">
+    </div>
+    <div class="media-heading">
+        <h2>
+            <%- namefirst %>
+            <%- namelast %>
+            <br>
+            <small>
+                <a href="#contacts/edit/<%- id %>"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a href="#contacts/delete/<%- id %>" class="delete-contract">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </a>
+            </small>
+        </h2>
+    </div>
+    <div class="media-body">
+        <dl>
+            <dt>Email:</dt>
+            <dd><%- email %></dd>
+        </dl>
+    </div>
+</script>
+
+<script type="text/template" id="tpl-new-contact">
+    <h2 class="page-header text-center"><%= isNew ? 'Create' : 'Edit' %> Contact</h2>
+    <form role="form" class="form-horizontal contract-form">
+        <div class="form-group">
+            <label class="col-sm-4 control-label">First name:</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control contact-namefirst-input" value="<%- namefirst %>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Last name:</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control contact-namelast-input" value="<%- namelast %>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Email:</label>
+            <div class="col-sm-6">
+                <input type="email" class="form-control contact-email-input" value="<%- email %>">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-3">
+                <button type="submit" class="btn btn-outline btn-lg btn-block">Submit</button>
+            </div>
+            <div class="col-sm-3">
+                <a href="#contacts" class="btn btn-outline btn-lg btn-block">Cancel</a>
+            </div>
+        </div>
+    </form>
+</script>
+
+<script src="vendor/jquery.js"></script>
+<script src="vendor/underscore.js"></script>
+<script src="vendor/backbone.js"></script>
+<script src="app/js/app.js"></script>
+<script src="app/js/models/contact.js"></script>
+<script src="app/js/collections/contacts.js"></script>
+<script src="app/js/views/contact.js"></script>
+<script src="app/js/views/contacts.js"></script>
+<script src="app/js/views/contactForm.js"></script>
+<script src="app/js/router.js"></script>
+
+<script>
+    $(function() {
+        $.ajax({
+            url: 'database/test_select.php?sex=M',
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                var array = [];
+                for (var i=1; i<data.length; i++) {
+                    data[i].id = i;
+                    array.push(data[i]);
+                }
+                data = array;
+                ContactManager.start({
+                    contacts: data
+                });
+            },
+            error: function(){
+                var data = [
+                    {
+                        id: 1,
+                        namefirst : 'Terrence S. Hatfield',
+                        email: 'TerrenceSHatfield@rhyta.com'
+                    },
+                    {
+                        id: 2,
+                        nameFirst : 'Chris M. Manning',
+                        email: 'ChrisMManning@dayrep.com'
+                    },
+                    {
+                        id: 3,
+                        nameFirst : 'Ricky M. Digiacomo',
+                        email: 'RickyMDigiacomo@teleworm.us'
+                    },
+                    {
+                        id: 4,
+                        nameFirst : 'Michael K. Bayne',
+                        tel: '702-989-5145',
+                        email: 'MichaelKBayne@rhyta.com'
+                    },
+                    {
+                        id: 5,
+                        nameFirst : 'John I. Wilson',
+                        email: 'JohnIWilson@dayrep.com'
+                    },
+                    {
+                        id: 6,
+                        nameFirst : 'Rodolfo P. Robinett',
+                        email: 'RodolfoPRobinett@jourrapide.com'
+                    }
+                ];
+                ContactManager.start({
+                    contacts: data
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>
